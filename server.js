@@ -8,13 +8,19 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Initialize Neon SQL client
-const sql = neon(process.env.DATABASE_URL);
+// Initialize Neon SQL client only if URL is available
+const getSql = () => {
+    if (!process.env.DATABASE_URL) {
+        throw new Error('DATABASE_URL is missing! Please connect Neon in Vercel Storage.');
+    }
+    return neon(process.env.DATABASE_URL);
+};
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static(__dirname)); 
+// Specifically serve static files from the root
+app.use(express.static(path.join(__dirname, '/'))); 
 
 // --- API ENDPOINTS ---
 
@@ -27,28 +33,28 @@ app.post('/api/rsvp', async (req, res) => {
     }
 
     try {
-        // Insert into Neon Postgres
+        const sql = getSql();
         await sql`
             INSERT INTO rsvps (name, guests, status, message, timestamp)
             VALUES (${name}, ${guests}, ${status}, ${message}, ${timestamp})
         `;
         
-        res.status(201).json({ success: true, message: 'RSVP sealed in the Neon vault!' });
+        res.status(201).json({ success: true, message: 'RSVP sealed!' });
     } catch (err) {
         console.error('Database Storage Error:', err);
-        res.status(500).json({ error: 'Executive storage failure. Please try again.' });
+        res.status(500).json({ error: err.message || 'Database failure.' });
     }
 });
 
 // 2. Get All RSVPs (for Admin)
 app.get('/api/rsvps', async (req, res) => {
     try {
-        // Fetch all RSVPs ordered by ID descending
+        const sql = getSql();
         const rows = await sql`SELECT * FROM rsvps ORDER BY id DESC`;
         res.json(rows);
     } catch (err) {
         console.error('Database Fetch Error:', err);
-        res.status(500).json({ error: 'Failed to retrieve guest list.' });
+        res.status(500).json({ error: err.message || 'Fetch failure.' });
     }
 });
 
@@ -57,10 +63,10 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-if (process.env.NODE_ENV !== 'production') {
+// For local development only
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
     app.listen(PORT, () => {
-        console.log(`Boss RSVP Server (Local) running at http://localhost:${PORT}`);
-        console.log(`Note: Connect Neon Postgres for cloud persistence.`);
+        console.log(`Boss Server running locally: http://localhost:${PORT}`);
     });
 }
 
