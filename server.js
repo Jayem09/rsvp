@@ -1,5 +1,5 @@
 const express = require('express');
-const { kv } = require('@vercel/kv');
+const { neon } = require('@neondatabase/serverless');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
@@ -7,6 +7,9 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Initialize Neon SQL client
+const sql = neon(process.env.DATABASE_URL);
 
 // Middleware
 app.use(cors());
@@ -24,21 +27,15 @@ app.post('/api/rsvp', async (req, res) => {
     }
 
     try {
-        const entry = {
-            id: Date.now(),
-            name,
-            guests,
-            status,
-            message,
-            timestamp
-        };
-
-        // Push to a Redis list named 'rsvps'
-        await kv.lpush('rsvps', JSON.stringify(entry));
+        // Insert into Neon Postgres
+        await sql`
+            INSERT INTO rsvps (name, guests, status, message, timestamp)
+            VALUES (${name}, ${guests}, ${status}, ${message}, ${timestamp})
+        `;
         
-        res.status(201).json({ success: true, message: 'RSVP sealed in the vault!' });
+        res.status(201).json({ success: true, message: 'RSVP sealed in the Neon vault!' });
     } catch (err) {
-        console.error('KV Storage Error:', err);
+        console.error('Database Storage Error:', err);
         res.status(500).json({ error: 'Executive storage failure. Please try again.' });
     }
 });
@@ -46,17 +43,11 @@ app.post('/api/rsvp', async (req, res) => {
 // 2. Get All RSVPs (for Admin)
 app.get('/api/rsvps', async (req, res) => {
     try {
-        // Fetch all items from the 'rsvps' list
-        const rows = await kv.lrange('rsvps', 0, -1);
-        
-        // Rows come back as strings or JSON objects depending on the client; 
-        // @vercel/kv usually handles JSON parsing if stored as objects, 
-        // but we'll map just in case.
-        const rsvps = rows.map(row => typeof row === 'string' ? JSON.parse(row) : row);
-        
-        res.json(rsvps);
+        // Fetch all RSVPs ordered by ID descending
+        const rows = await sql`SELECT * FROM rsvps ORDER BY id DESC`;
+        res.json(rows);
     } catch (err) {
-        console.error('KV Fetch Error:', err);
+        console.error('Database Fetch Error:', err);
         res.status(500).json({ error: 'Failed to retrieve guest list.' });
     }
 });
@@ -69,7 +60,7 @@ app.get('/', (req, res) => {
 if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => {
         console.log(`Boss RSVP Server (Local) running at http://localhost:${PORT}`);
-        console.log(`Note: Connect Vercel KV for cloud persistence.`);
+        console.log(`Note: Connect Neon Postgres for cloud persistence.`);
     });
 }
 
