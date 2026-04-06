@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting with the Boss - Kyle Asher's Celebration</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,700&family=Bebas+Neue&display=swap"
+        rel="stylesheet">
+    <!-- Confetti Script -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+
+<body>
+
+    <div class="sidebar-icons sidebar-left"></div>
+    <div class="sidebar-icons sidebar-right"></div>
+
+    <!-- Floating Decorations -->
+    <div class="floating-icon briefcase" style="top: 15%; left: 10%;">💼</div>
+    <div class="floating-icon tie" style="top: 40%; right: 12%;">👔</div>
+    <div class="floating-icon gavel" style="top: 75%; left: 8%;">🔨</div>
+    <div class="floating-icon office" style="top: 60%; right: 10%;">🏢</div>
+    <div class="floating-icon bottle" style="top: 30%; left: 20%;">🍼</div>
+    <div class="floating-icon cash" style="top: 50%; left: 5%;">💵</div>
+    <div class="floating-icon chart" style="top: 25%; right: 5%;">📈</div>
+    <div class="floating-icon teddy" style="top: 80%; right: 15%;">🧸</div>
+
+    <section id="hero">
+        <div class="hero-header fade-in">
+            <p class="meeting-text">You have a meeting with the boss!</p>
+            <div class="boss-title">
+                <span class="boss-label">BOSS</span>
+                <h1 class="boss-name">KYLE ASHER</h1>
+            </div>
+        </div>
+
+        <div class="boss-avatar-wrapper fade-in-up delay-1">
+            <div class="avatar-circle">
+                <img src="658367108_870460262717080_4737120044187067777_n.jpg" alt="Kyle Asher" class="avatar-img">
+            </div>
+            <div class="age-badge">1</div>
+        </div>
+
+        <div class="event-headline fade-in delay-2">
+            <p class="turning-text">IS CELEBRATING HIS CHRISTENING</p>
+        </div>
+
+        <div class="corporate-gallery fade-in-up delay-2">
+            <div class="gallery-item"><img src="658367108_870460262717080_4737120044187067777_n.jpg" alt="Kyle Photo 1">
+            </div>
+            <div class="gallery-item"><img src="658980804_973970824986874_8778255373972931797_n.jpg" alt="Kyle Photo 2">
+            </div>
+            <div class="gallery-item"><img src="662010125_2433269027180801_1806252007954007017_n.jpg"
+                    alt="Kyle Photo 3"></div>
+        </div>
+    </section>
+
+    <main>
+        <section id="schedule" class="card-section reveal">
+            <div class="meeting-tag">MEETING DETAILS</div>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span class="label">DATE</span>
+                    <h3>
+                        April 28, 2026</h3>
+                    <p>Celebration Month</p>
+                </div>
+                <div class="detail-item">
+                    <span class="label">TIME</span>
+                    <h3>9:30am</h3>
+                    <p>GMT +8</p>
+                </div>
+                <div class="detail-item full-width">
+                    <span class="label">LOCATION</span>
+                    <h3>San Celestino Lipa City</h3>
+                    <p>Malaluan Residence</p>
+                </div>
+            </div>
+            <button class="btn-calendar">ADD TO CALENDAR</button>
+        </section>
+
+        <section id="dress-code" class="card-section reveal">
+            <div class="meeting-tag">DRESS CODE</div>
+            <div class="dress-grid">
+                <div class="dress-item">
+                    <h4>Godparents</h4>
+                    <p>White Casual</p>
+                    <div class="swatch white"></div>
+                </div>
+                <div class="dress-item">
+                    <h4>Guests</h4>
+                    <p>Blue or Black Casual</p>
+                    <div class="swatch-row">
+                        <div class="swatch blue"></div>
+                        <div class="swatch black"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gift-note" class="card-section reveal">
+            <div class="meeting-tag">GIFT NOTE</div>
+            <p class="note-text">
+                Your presence is our favorite gift! If you feel like giving something extra,
+                any gesture will be truly appreciated as Kyle celebrates his christening!
+            </p>
+        </section>
+
+        <section id="rsvp" class="card-section rsvp-card reveal">
+            <div class="meeting-tag">CONFIRM ATTENDANCE</div>
+            <form id="rsvp-form">
+                <div class="form-group">
+                    <label>ATTENDEE NAME</label>
+                    <input type="text" id="name" required placeholder="Full Name">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>GUEST COUNT</label>
+                        <select id="guests">
+                            <option>1 Attendee</option>
+                            <option>2 Attendees</option>
+                            <option>3+ Attendees</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>STATUS</label>
+                        <select id="status">
+                            <option>Accepting Meeting</option>
+                            <option>Declining Meeting</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>MESSAGE FOR THE BOSS</label>
+                    <textarea id="message" placeholder="Optional notes..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">SUBMIT RSVP</button>
+            </form>
+            <div id="form-success" class="hidden">
+                <div class="success-content">
+                    <h3>Confirmed!</h3>
+                    <p>Your meeting request has been accepted. See you there, Boss!</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="polka-footer">
+        <div class="polka-dots"></div>
+        <p>© 2026 KYLE ASHER BIRTHDAY & CHRISTENING</p>
+    </footer>
+
+    <!-- Admin Modal -->
+    <div id="admin-modal" class="modal-overlay hidden">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h2>BOSSLOG / EXECUTIVE POWERS</h2>
+                <button id="close-admin">×</button>
+            </div>
+
+            <div class="admin-stats">
+                <div class="stat-box">
+                    <span class="stat-label">TOTAL GUESTS</span>
+                    <h3 id="total-guests">0</h3>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">ACCEPTED</span>
+                    <h3 id="accepted-count">0</h3>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="guest-table">
+                    <thead>
+                        <tr>
+                            <th>NAME</th>
+                            <th>COUNT</th>
+                            <th>STATUS</th>
+                            <th>MESSAGE</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guest-body">
+                        <!-- Data injected here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="admin-actions">
+                <button id="download-csv" class="btn-calendar">DOWNLOAD BOARD MINUTES (.CSV)</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
