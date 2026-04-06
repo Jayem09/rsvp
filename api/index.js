@@ -6,7 +6,6 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Initialize Neon SQL client only if URL is available
 const getSql = () => {
@@ -19,8 +18,9 @@ const getSql = () => {
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-// Specifically serve static files from the root
-app.use(express.static(path.join(__dirname, '/'))); 
+
+// Specifically serve static files from the parent directory (the root)
+app.use(express.static(path.join(__dirname, '../'))); 
 
 // --- API ENDPOINTS ---
 
@@ -60,14 +60,8 @@ app.get('/api/rsvps', async (req, res) => {
 
 // Serve frontend on root
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, '../index.html'));
 });
 
-// For local development only
-if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
-    app.listen(PORT, () => {
-        console.log(`Boss Server running locally: http://localhost:${PORT}`);
-    });
-}
-
+// Export the app for Vercel's serverless function environment
 module.exports = app;
